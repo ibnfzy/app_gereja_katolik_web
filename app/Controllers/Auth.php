@@ -49,4 +49,13 @@ class Auth extends BaseController
 
         return redirect()->to($redirectPath);
     }
+
+    public function logout()
+    {
+        $session = session();
+        $session->remove('auth');
+        $session->regenerate(true);
+
+        return redirect()->to('/Auth/login')->with('message', 'Anda telah keluar dari sesi.');
+    }
 }
