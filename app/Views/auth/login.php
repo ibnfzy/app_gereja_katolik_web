@@ -59,22 +59,36 @@
                     <h2 class="text-2xl font-bold text-primary">Masuk ke Akun Anda</h2>
                     <p class="text-sm text-secondary mt-1">Gunakan kredensial yang valid untuk melanjutkan.</p>
                 </div>
-                <form class="space-y-4">
+                <?php $errors = session()->getFlashdata('errors'); ?>
+                <?php if (session()->getFlashdata('error')): ?>
+                    <div class="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-red-800 text-sm">
+                        <?= esc(session()->getFlashdata('error')) ?>
+                    </div>
+                <?php endif; ?>
+                <?php if ($errors): ?>
+                    <div class="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-amber-800 text-sm space-y-1">
+                        <?php foreach ($errors as $error): ?>
+                            <p><?= esc($error) ?></p>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+
+                <form class="space-y-4" action="<?= site_url('/Auth/login') ?>" method="post">
+                    <?= csrf_field() ?>
                     <div>
                         <label for="role" class="block text-sm font-semibold text-primary mb-1">Peran</label>
                         <select id="role" name="role" class="w-full rounded-lg border border-surface bg-background px-4 py-3 text-primary focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent">
-                            <option value="tata-usaha">Tata Usaha</option>
-                            <option value="bendahara">Bendahara</option>
-                            <option value="admin">Administrator</option>
+                            <option value="tata-usaha" <?= old('role') === 'tata-usaha' ? 'selected' : '' ?>>Tata Usaha</option>
+                            <option value="bendahara" <?= old('role') === 'bendahara' ? 'selected' : '' ?>>Bendahara</option>
                         </select>
                     </div>
                     <div>
                         <label for="username" class="block text-sm font-semibold text-primary mb-1">Username</label>
-                        <input type="text" id="username" name="username" placeholder="Masukkan username" class="w-full rounded-lg border border-surface bg-background px-4 py-3 text-primary placeholder-secondary/70 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent">
+                        <input type="text" id="username" name="username" placeholder="Masukkan username" value="<?= old('username') ?>" class="w-full rounded-lg border border-surface bg-background px-4 py-3 text-primary placeholder-secondary/70 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent" required>
                     </div>
                     <div>
                         <label for="password" class="block text-sm font-semibold text-primary mb-1">Password</label>
-                        <input type="password" id="password" name="password" placeholder="Masukkan password" class="w-full rounded-lg border border-surface bg-background px-4 py-3 text-primary placeholder-secondary/70 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent">
+                        <input type="password" id="password" name="password" placeholder="Masukkan password" class="w-full rounded-lg border border-surface bg-background px-4 py-3 text-primary placeholder-secondary/70 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent" required>
                     </div>
                     <div class="flex items-center justify-between text-sm text-secondary">
                         <label class="inline-flex items-center gap-2">
